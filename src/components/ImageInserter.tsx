@@ -1,24 +1,27 @@
 import { Group, Text, useMantineTheme } from "@mantine/core";
 import {
   Dropzone,
-  DropzoneProps,
+
   FileWithPath,
   MIME_TYPES,
 } from "@mantine/dropzone";
 import { IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
+import { useState } from "react";
+import { ImagePreview } from "./ImageViewer";
 
-interface ImagePlaceHolderProps extends Partial<DropzoneProps> {
-  onUpload: (files: FileWithPath[]) => void;
-}
-
-export function InsertImagePlaceHolder({
-  onUpload,
-  ...props
-}: ImagePlaceHolderProps) {
+export function InsertImagePlaceHolder() {
   const theme = useMantineTheme();
 
+  const [files, setFiles] = useState<FileWithPath[]>([]);
+
   const handleUpload = (files: FileWithPath[]) => {
-    onUpload(files);
+    setFiles(files);
+    previews();
+  };
+
+  const previews = () => {
+    const imageUrl = URL.createObjectURL(files[0]);
+    return <ImagePreview image={imageUrl} onLoad={() => URL.revokeObjectURL(imageUrl)}/>;
   };
 
   return (
@@ -27,7 +30,7 @@ export function InsertImagePlaceHolder({
       onReject={(files) => console.log("rejected files", files)}
       maxSize={3 * 1024 ** 2}
       accept={[MIME_TYPES.png, MIME_TYPES.jpeg, MIME_TYPES.svg]}
-      {...props}>
+      >
       <Group
         position="center"
         spacing="xl"
