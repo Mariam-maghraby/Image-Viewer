@@ -42,7 +42,6 @@ export function ImageViewer() {
   const shapes = items.map((item, index) => {
     const { id, height, width, x, y } = item;
     return (
-      
       <RectShape
         key={id}
         active={selectedShapeIds.indexOf(id) >= 0}
@@ -70,19 +69,59 @@ export function ImageViewer() {
 
   const previews = files.map((file, index) => {
     const imageUrl = URL.createObjectURL(file);
+
     return (
       <>
-      <ShapeEditor
-        ref={ref}
-        vectorWidth={vectorWidth}
-        vectorHeight={vectorHeight}
-      ></ShapeEditor>
-      <Image
-        // ref={ref}
-        key={index}
-        src={imageUrl}
-        imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }}
-      />
+        <ShapeEditor
+          ref={ref}
+          vectorWidth={vectorWidth}
+          vectorHeight={vectorHeight}>
+          <ImageLayer
+            key={index}
+            src={imageUrl}
+            onLoad={({ naturalWidth, naturalHeight }) => {
+              setVectorDimensions({
+                vectorWidth: naturalWidth,
+                vectorHeight: naturalHeight,
+              });
+            }}
+          />
+          <DrawLayer
+            onAddShape={({ x, y, width, height }) => {
+              setItems((currentItems) => [
+                ...currentItems,
+                { id: `id${idIterator}`, x, y, width, height },
+              ]);
+              idIterator += 1;
+            }}
+          />
+          {items.map((item, index) => {
+            const { id, height, width, x, y } = item;
+            return (
+              <RectShape
+                key={id}
+                shapeId={id}
+                height={height}
+                width={width}
+                x={x}
+                y={y}
+                onChange={(newRect) => {
+                  setItems((currentItems) =>
+                    arrayReplace(currentItems, index, {
+                      ...item,
+                      ...newRect,
+                    })
+                  );
+                }}
+                onDelete={() => {
+                  setItems((currentItems) =>
+                    arrayReplace(currentItems, index, [])
+                  );
+                }}
+              />
+            );
+          })}
+        </ShapeEditor>
       </>
     );
   });
