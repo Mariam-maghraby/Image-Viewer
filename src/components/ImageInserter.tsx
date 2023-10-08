@@ -18,7 +18,7 @@ export function InsertImagePlaceHolder() {
     return (
       <ImagePreview
         image={imageUrl}
-        onLoad={() => URL.revokeObjectURL(imageUrl)}
+        onLoadImg={() => URL.revokeObjectURL(imageUrl)}
       />
     );
   };
