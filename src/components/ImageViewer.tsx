@@ -30,7 +30,6 @@ export function ImageViewer() {
 
   const [items, setItems] = useState([
     { id: "1", x: 20, y: 120, width: 145, height: 140 },
-    { id: "2", x: 15, y: 0, width: 150, height: 95 },
   ]);
 
   const [{ vectorHeight, vectorWidth }, setVectorDimensions] = useState({
@@ -39,18 +38,12 @@ export function ImageViewer() {
   });
   const [selectedShapeIds, setSelectedShapeIds] = useState([]);
 
-  
-  
-
   const previews = files.map((file, index) => {
     const imageUrl = URL.createObjectURL(file);
 
     return (
       <>
-        <ShapeEditor
-          
-          vectorWidth={vectorWidth}
-          vectorHeight={vectorHeight}>
+        <ShapeEditor vectorWidth={vectorWidth} vectorHeight={vectorHeight}>
           <ImageLayer
             key={index}
             src={imageUrl}
