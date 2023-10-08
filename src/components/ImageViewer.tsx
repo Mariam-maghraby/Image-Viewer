@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Text, Image, Box, Group, useMantineTheme } from "@mantine/core";
+import { Text, Box, Group, useMantineTheme } from "@mantine/core";
 import { IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
 import { Dropzone, MIME_TYPES, FileWithPath } from "@mantine/dropzone";
 import {
@@ -10,7 +10,7 @@ import {
   wrapShape,
 } from "react-shape-editor";
 
-function arrayReplace(arr, index, item) {
+function arrayReplace(arr: [], index: number, item: any) {
   return [
     ...arr.slice(0, index),
     ...(Array.isArray(item) ? item : [item]),
@@ -39,33 +39,8 @@ export function ImageViewer() {
   });
   const [selectedShapeIds, setSelectedShapeIds] = useState([]);
 
-  const shapes = items.map((item, index) => {
-    const { id, height, width, x, y } = item;
-    return (
-      <RectShape
-        key={id}
-        active={selectedShapeIds.indexOf(id) >= 0}
-        shapeId={id}
-        shapeIndex={index}
-        height={height}
-        width={width}
-        x={x}
-        y={y}
-        onChange={(newRect) => {
-          setItems((currentItems) =>
-            arrayReplace(currentItems, index, {
-              ...item,
-              ...newRect,
-            })
-          );
-        }}
-        onDelete={() => {
-          setItems((currentItems) => arrayReplace(currentItems, index, []));
-        }}
-      />
-    );
-  });
-  const ref = useRef();
+  
+  
 
   const previews = files.map((file, index) => {
     const imageUrl = URL.createObjectURL(file);
@@ -73,7 +48,7 @@ export function ImageViewer() {
     return (
       <>
         <ShapeEditor
-          ref={ref}
+          
           vectorWidth={vectorWidth}
           vectorHeight={vectorHeight}>
           <ImageLayer
