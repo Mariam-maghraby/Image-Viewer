@@ -1,40 +1,89 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Text, Image, Box, Group, useMantineTheme } from "@mantine/core";
 import { IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
 import { Dropzone, MIME_TYPES, FileWithPath } from "@mantine/dropzone";
-import * as rb from "rangeblock"
-// import { useMove } from "@mantine/hooks";
+import {
+  ShapeEditor,
+  ImageLayer,
+  DrawLayer,
+  SelectionLayer,
+  wrapShape,
+} from "react-shape-editor";
+
+function arrayReplace(arr, index, item) {
+  return [
+    ...arr.slice(0, index),
+    ...(Array.isArray(item) ? item : [item]),
+    ...arr.slice(index + 1),
+  ];
+}
+
+const RectShape = wrapShape(({ width, height }) => (
+  <rect width={width} height={height} fill="rgba(0,0,255,0.5)" />
+));
+
+let idIterator = 1;
 
 export function ImageViewer() {
   const theme = useMantineTheme();
   const [files, setFiles] = useState<FileWithPath[]>([]);
-  // const [firstPt, setFirstPt] = useState({ x: 0.2, y: 0.6 });
-  // const [secondPt, setSecondPt] = useState({ x: 0.8, y: 0.9 });
-  // const [thirdPt, setThirdPt] = useState({ x: 0.1, y: 0.7 });
 
-  // const { ref } = useMove(setFirstPt);
-  // const { reftwo } = useMove(setSecondPt);
-  // const { refThree } = useMove(setThirdPt);
+  const [items, setItems] = useState([
+    { id: "1", x: 20, y: 120, width: 145, height: 140 },
+    { id: "2", x: 15, y: 0, width: 150, height: 95 },
+  ]);
 
-  // FLOW_VARIABLES["selection"] = JSON.stringify(selection);
+  const [{ vectorHeight, vectorWidth }, setVectorDimensions] = useState({
+    vectorHeight: 0,
+    vectorWidth: 0,
+  });
+  const [selectedShapeIds, setSelectedShapeIds] = useState([]);
 
-  // const selection = window.getSelection();
-  // const range = selection?.getRangeAt(0);
-  // const rect = range?.getBoundingClientRect();
-  // console.log(rect?.left, rect?.top);
-
-  const block = rb.extractSelectedBlock(window, document);
-  console.info("Text layout: " + JSON.stringify(block.dimensions));
+  const shapes = items.map((item, index) => {
+    const { id, height, width, x, y } = item;
+    return (
+      
+      <RectShape
+        key={id}
+        active={selectedShapeIds.indexOf(id) >= 0}
+        shapeId={id}
+        shapeIndex={index}
+        height={height}
+        width={width}
+        x={x}
+        y={y}
+        onChange={(newRect) => {
+          setItems((currentItems) =>
+            arrayReplace(currentItems, index, {
+              ...item,
+              ...newRect,
+            })
+          );
+        }}
+        onDelete={() => {
+          setItems((currentItems) => arrayReplace(currentItems, index, []));
+        }}
+      />
+    );
+  });
+  const ref = useRef();
 
   const previews = files.map((file, index) => {
     const imageUrl = URL.createObjectURL(file);
     return (
+      <>
+      <ShapeEditor
+        ref={ref}
+        vectorWidth={vectorWidth}
+        vectorHeight={vectorHeight}
+      ></ShapeEditor>
       <Image
         // ref={ref}
         key={index}
         src={imageUrl}
         imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }}
       />
+      </>
     );
   });
 

@@ -1584,11 +1584,6 @@ lodash.merge@^4.6.2:
   resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
   integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
 
-logez@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/logez/-/logez-1.0.0.tgz#a7ab2a43e2abb9f6d2d2641805941cc8bfa91a3b"
-  integrity sha512-ec50mXR8E8Rw1r9VhFaNwezPaJxG9bIkLlvllhnI3JAvkLbibLNAnThaEWuXlL18AsMMcxEcPvWip0PJzfyFEA==
-
 loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
@@ -1772,13 +1767,6 @@ queue-microtask@^1.2.2:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
-
-rangeblock@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/rangeblock/-/rangeblock-1.2.0.tgz#bbadf9a98cb5255e945bb7cd12bea14d6e160cb2"
-  integrity sha512-dcWmGBgGIcMUTNxbwGfBzCPtEp+DzxAtUXEB+HnuUQY9WA/MIvPAdSRqYKRb5QWPGvX/QPajT+yv37H/kMuR+w==
-  dependencies:
-    logez "^1.0.0"
 
 react-dom@^18.2.0:
   version "18.2.0"
