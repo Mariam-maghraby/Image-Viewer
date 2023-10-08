@@ -2,15 +2,35 @@ import { useState } from "react";
 import { Text, Image, Box, Group, useMantineTheme } from "@mantine/core";
 import { IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
 import { Dropzone, MIME_TYPES, FileWithPath } from "@mantine/dropzone";
+import * as rb from "rangeblock"
+// import { useMove } from "@mantine/hooks";
 
 export function ImageViewer() {
   const theme = useMantineTheme();
   const [files, setFiles] = useState<FileWithPath[]>([]);
+  // const [firstPt, setFirstPt] = useState({ x: 0.2, y: 0.6 });
+  // const [secondPt, setSecondPt] = useState({ x: 0.8, y: 0.9 });
+  // const [thirdPt, setThirdPt] = useState({ x: 0.1, y: 0.7 });
+
+  // const { ref } = useMove(setFirstPt);
+  // const { reftwo } = useMove(setSecondPt);
+  // const { refThree } = useMove(setThirdPt);
+
+  // FLOW_VARIABLES["selection"] = JSON.stringify(selection);
+
+  // const selection = window.getSelection();
+  // const range = selection?.getRangeAt(0);
+  // const rect = range?.getBoundingClientRect();
+  // console.log(rect?.left, rect?.top);
+
+  const block = rb.extractSelectedBlock(window, document);
+  console.info("Text layout: " + JSON.stringify(block.dimensions));
 
   const previews = files.map((file, index) => {
     const imageUrl = URL.createObjectURL(file);
     return (
       <Image
+        // ref={ref}
         key={index}
         src={imageUrl}
         imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }}
@@ -64,13 +84,7 @@ export function ImageViewer() {
     );
   }
 
-  if (files.length > 0) {
-    return (
-      <Box
-      //   className="flex justify-center"
-      >
-        {previews}
-      </Box>
-    );
+  if (files.length) {
+    return <Box>{previews}</Box>;
   }
 }

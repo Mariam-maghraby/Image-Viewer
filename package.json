@@ -16,8 +16,10 @@
     "@mantine/hooks": "6.0.10",
     "@tabler/icons": "^2.38.0",
     "@tabler/icons-react": "^2.38.0",
+    "rangeblock": "^1.2.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-shape-editor": "4.0.0-alpha.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
