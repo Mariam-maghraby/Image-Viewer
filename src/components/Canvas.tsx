@@ -9,6 +9,8 @@ const Canvas = (props: Image) => {
   const contextRef = useRef(null);
 
   const [isDrawing, setIsDrawing] = useState(false);
+
+  /*for using image in canvas*/
   const [img, setImg] = useState(null);
 
   const canvasOffSetX = useRef(null);
@@ -52,9 +54,6 @@ const Canvas = (props: Image) => {
     if (!isDrawing) {
       return;
     }
-
-    // context.clearRect(0, 0, 500, 500);
-    // context.drawImage(img, 0, 0);
 
     nativeEvent.preventDefault();
     nativeEvent.stopPropagation();

@@ -2,44 +2,14 @@ import { useState } from "react";
 import { Text, Box, Group, useMantineTheme } from "@mantine/core";
 import { IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
 import { Dropzone, MIME_TYPES, FileWithPath } from "@mantine/dropzone";
-import {
-  ShapeEditor,
-  ImageLayer,
-  DrawLayer,
-  SelectionLayer,
-  wrapShape,
-} from "react-shape-editor";
+
 import Canvas from "./Canvas";
-
-function arrayReplace(arr: [], index: number, item: any) {
-  return [
-    ...arr.slice(0, index),
-    ...(Array.isArray(item) ? item : [item]),
-    ...arr.slice(index + 1),
-  ];
-}
-
-const RectShape = wrapShape(({ width, height }) => (
-  <rect width={width} height={height} fill="rgba(0,0,255,0.5)" />
-));
-
-let idIterator = 1;
 
 export function ImageViewer() {
   const theme = useMantineTheme();
   const [files, setFiles] = useState<FileWithPath[]>([]);
 
-  const [items, setItems] = useState([
-    { id: "1", x: 20, y: 120, width: 145, height: 140 },
-  ]);
-
-  const [{ vectorHeight, vectorWidth }, setVectorDimensions] = useState({
-    vectorHeight: 0,
-    vectorWidth: 0,
-  });
-  const [selectedShapeIds, setSelectedShapeIds] = useState([]);
-
-  const preview = files.map((file, index) => {
+  const preview = files.map((file) => {
     const imageUrl = URL.createObjectURL(file);
 
     return (
