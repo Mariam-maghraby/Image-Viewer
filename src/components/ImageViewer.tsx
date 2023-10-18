@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, Box, Group, useMantineTheme, Image } from "@mantine/core";
+import { Text, Box, Group, useMantineTheme } from "@mantine/core";
 import { IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
 import { Dropzone, MIME_TYPES, FileWithPath } from "@mantine/dropzone";
 import {
@@ -9,6 +9,7 @@ import {
   SelectionLayer,
   wrapShape,
 } from "react-shape-editor";
+import Canvas from "./Canvas";
 
 function arrayReplace(arr: [], index: number, item: any) {
   return [
@@ -43,10 +44,7 @@ export function ImageViewer() {
 
     return (
       <>
-        <canvas id="img-canvas" width="800px" height="400px">
-          <img src={imageUrl} alt= 
-          "upladede Image"/>
-        </canvas>
+        <Canvas imgSrc={imageUrl} />
       </>
     );
   });

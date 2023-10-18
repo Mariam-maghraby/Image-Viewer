@@ -5,8 +5,8 @@ import { ImageViewer } from "./components/ImageViewer";
 function App() {
   return (
     <>
-      {/* <ImageViewer /> */}
-      <Canvas />
+      <ImageViewer />
+      {/* <Canvas /> */}
     </>
   );
 }
