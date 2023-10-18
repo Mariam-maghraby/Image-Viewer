@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Sidebar } from "./Sidebar";
-import { Group, Stack } from "@mantine/core";
+import {  Stack } from "@mantine/core";
 
 interface Image {
   imgSrc: string;
