@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Sidebar } from "./Sidebar";
-import { Stack, Button } from "@mantine/core";
+import { Stack, Button, Box } from "@mantine/core";
 
 interface Image {
   imgSrc: string;
@@ -24,6 +24,8 @@ const Canvas = (props: Image) => {
   const [x2, setX2] = useState(0);
   const [y1, setY1] = useState(0);
   const [y2, setY2] = useState(0);
+
+  const imagesBuffer = [];
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -100,17 +102,27 @@ const Canvas = (props: Image) => {
   return (
     <>
       <Stack>
-        <Sidebar />
+        {/* <Sidebar /> */}
         <Button
           onClick={() => {
             const width = x2 - x1;
             const height = y2 - y1;
+            const local_x1 = x1;
+            const local_y1 = y1;
+            const local_x2 = x2;
+            const local_y2 = y2;
             console.log(
               `x1: ${x1}, x2: ${x2},  y1: ${y1}, y2: ${y2}, width: ${
                 x2 - x1
               }, height: ${y2 - y1}`
             );
-            const pixelsData= contextRef.current.getImageData(x1, y1, width, height);
+
+            const pixelsData = contextRef.current.getImageData(
+              local_x1,
+              local_y1,
+              width,
+              height
+            );
             const orginalData = pixelsData.data;
             const removedData = pixelsData.data;
 
@@ -119,11 +131,88 @@ const Canvas = (props: Image) => {
               removedData[i + 1] = 0;
               removedData[i + 2] = 0;
             }
-            contextRef.current.putImageData(pixelsData, x1, y1);
+            contextRef.current.putImageData(pixelsData, local_x1, local_y1);
+
+            contextRef.current.save();
+
             console.log("orginalData", orginalData);
+            let dataObject = {
+              orginalData: orginalData,
+              local_x1: local_x1,
+              local_y1: local_y1,
+              width: width,
+              height: height,
+            };
+
+            imagesBuffer.push(dataObject);
           }}>
           Hide Selected Area
         </Button>
+        <Button
+          onClick={() => {
+            contextRef.current.clearRect(
+              0,
+              0,
+              canvasRef.current.width,
+              canvasRef.current.height
+            );
+
+            console.log(`x, y: ${x1}, ${y1}`);
+            let width = imagesBuffer[0].width;
+            console.log("width", width);
+            let height = imagesBuffer[0].height;
+
+            let min_x = imagesBuffer[0].local_x1;
+            let max_x = imagesBuffer[0].local_x2 + width;
+
+            let min_y = imagesBuffer[0].local_y1;
+            let max_y = imagesBuffer[0].local_y1 + height;
+
+            if (x1 < max_x && x1 > min_x && y1 < max_y && y1 > min_y) {
+              const pixelsData = contextRef.current.getImageData(
+                min_x,
+                min_y,
+                width,
+                height
+              );
+              const currentData = pixelsData.data;
+              const originalData = imagesBuffer[0].orginalData;
+              for (let i = 0; i < removedData.length; i += 4) {
+                currentData[i] = originalData[i];
+                currentData[i + 1] = originalData[i + 1];
+                currentData[i + 2] = originalData[i + 2];
+              }
+
+              contextRef.current.putImageData(originalData, min_x, min_y);
+            } else {
+              alert("Please select the one of the hidden blocks");
+            }
+          }}>
+          Show Selected Area
+        </Button>
+        <Button
+          onClick={() => {
+            contextRef.current.clearRect(
+              0,
+              0,
+              canvasRef.current.width,
+              canvasRef.current.height
+            );
+            contextRef.current.drawImage(img, 0, 0, img.width, img.height);
+          }}>
+          Show All hidden blocks
+        </Button>
+        <Button
+          onClick={() => {
+            const link = document.createElement("a");
+            link.download = "download.png";
+            link.href = canvasRef.current.toDataURL();
+            link.click();
+            link.delete;
+          }}>
+          Download Image
+        </Button>
+
         <canvas
           id="canvas"
           width="600px"

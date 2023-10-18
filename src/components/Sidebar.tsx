@@ -21,7 +21,7 @@ export function Sidebar() {
         </Stack>
       </Drawer>
 
-      <Button onClick={open}>Open Drawer</Button>
+      <Button onClick={open}>Open Editor Options</Button>
     </>
   );
 }
