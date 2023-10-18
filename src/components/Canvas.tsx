@@ -10,6 +10,11 @@ const Canvas = (props: Image) => {
 
   const [isDrawing, setIsDrawing] = useState(false);
 
+  const canvasOffSetX = useRef(null);
+  const canvasOffSetY = useRef(null);
+  const startX = useRef(null);
+  const startY = useRef(null);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
@@ -23,40 +28,53 @@ const Canvas = (props: Image) => {
     context.fillRect(0, 0, context.canvas.width, context.canvas.height);
 
     contextRef.current = context;
+
+    const canvasOffSet = canvas.getBoundingClientRect();
+    canvasOffSetX.current = canvasOffSet.top;
+    canvasOffSetY.current = canvasOffSet.left;
   }, []);
 
-  const startDrawing = ({ nativeEvent }: any) => {
-    const { offsetX, offsetY } = nativeEvent;
-    contextRef.current.beginPath();
-    contextRef.current.moveTo(offsetX, offsetY);
-    contextRef.current.lineTo(offsetX, offsetY);
-    contextRef.current.stroke();
-    setIsDrawing(true);
+  const startDrawingRectangle = ({ nativeEvent }) => {
     nativeEvent.preventDefault();
+    nativeEvent.stopPropagation();
+
+    startX.current = nativeEvent.clientX - canvasOffSetX.current;
+    startY.current = nativeEvent.clientY - canvasOffSetY.current;
+
+    setIsDrawing(true);
   };
 
-  const draw = ({ nativeEvent }) => {
+  const drawRectangle = ({ nativeEvent }) => {
     if (!isDrawing) {
       return;
     }
 
-    const { offsetX, offsetY } = nativeEvent;
-    contextRef.current.lineTo(offsetX, offsetY);
-    contextRef.current.stroke();
     nativeEvent.preventDefault();
+    nativeEvent.stopPropagation();
+
+    const newMouseX = nativeEvent.clientX - canvasOffSetX.current;
+    const newMouseY = nativeEvent.clientY - canvasOffSetY.current;
+
+    const rectWidht = newMouseX - startX.current;
+    const rectHeight = newMouseY - startY.current;
+
+    contextRef.current.clearRect(
+      0,
+      0,
+      canvasRef.current.width,
+      canvasRef.current.height
+    );
+
+    contextRef.current.strokeRect(
+      startX.current,
+      startY.current,
+      rectWidht,
+      rectHeight
+    );
   };
 
-  const stopDrawing = () => {
-    contextRef.current.closePath();
+  const stopDrawingRectangle = () => {
     setIsDrawing(false);
-  };
-
-  const setToDraw = () => {
-    contextRef.current.globalCompositeOperation = "source-over";
-  };
-
-  const setToErase = () => {
-    contextRef.current.globalCompositeOperation = "destination-out";
   };
 
   return (
@@ -66,10 +84,10 @@ const Canvas = (props: Image) => {
       height="800px"
       ref={canvasRef}
       {...props}
-      onMouseDown={startDrawing}
-      onMouseMove={draw}
-      onMouseUp={stopDrawing}
-      onMouseLeave={stopDrawing}
+      onMouseDown={startDrawingRectangle}
+      onMouseMove={drawRectangle}
+      onMouseUp={stopDrawingRectangle}
+      onMouseLeave={stopDrawingRectangle}
     />
   );
 };
