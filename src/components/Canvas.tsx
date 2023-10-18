@@ -9,6 +9,7 @@ const Canvas = (props: Image) => {
   const contextRef = useRef(null);
 
   const [isDrawing, setIsDrawing] = useState(false);
+  const [img, setImg] = useState(null);
 
   const canvasOffSetX = useRef(null);
   const canvasOffSetY = useRef(null);
@@ -23,6 +24,7 @@ const Canvas = (props: Image) => {
       context.drawImage(img, 0, 0, img.width, img.height);
     };
     img.src = props.imgSrc;
+    setImg(img);
 
     // context.save();
 
@@ -70,11 +72,7 @@ const Canvas = (props: Image) => {
       canvasRef.current.height
     );
 
-    const img = new Image();
-    img.onload = () => {
-      contextRef.current.drawImage(img, 0, 0, img.width, img.height);
-    };
-    img.src = props.imgSrc;
+    contextRef.current.drawImage(img, 0, 0, img.width, img.height);
 
     contextRef.current.strokeRect(
       startX.current,
