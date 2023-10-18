@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
+import {Sidebar} from "./Sidebar";
+
 
 interface Image {
   imgSrc: string;
@@ -23,15 +25,15 @@ const Canvas = (props: Image) => {
     const context = canvas.getContext("2d");
     const img = new Image();
     img.onload = () => {
-      context.drawImage(img, 0, 0, img.width, img.height);
+      context.drawImage(img, 0, 0, context.canvas.width, context.canvas.height);
     };
     img.src = props.imgSrc;
     setImg(img);
 
     // context.save();
 
-    context.fillStyle = "#000000";
-    context.fillRect(0, 0, context.canvas.width, context.canvas.height);
+    // context.fillStyle = "#000000";
+    // context.fillRect(0, 0, context.canvas.width, context.canvas.height);
 
     contextRef.current = context;
 
@@ -86,17 +88,21 @@ const Canvas = (props: Image) => {
   };
 
   return (
-    <canvas
-      id="canvas"
-      width="600px"
-      height="800px"
-      ref={canvasRef}
-      {...props}
-      onMouseDown={startDrawingRectangle}
-      onMouseMove={drawRectangle}
-      onMouseUp={stopDrawingRectangle}
-      onMouseLeave={stopDrawingRectangle}
-    />
+    <>
+      
+      <canvas
+        id="canvas"
+        width="600px"
+        height="800px"
+        ref={canvasRef}
+        {...props}
+        onMouseDown={startDrawingRectangle}
+        onMouseMove={drawRectangle}
+        onMouseUp={stopDrawingRectangle}
+        onMouseLeave={stopDrawingRectangle}
+      />
+      <Sidebar />
+    </>
   );
 };
 
