@@ -102,13 +102,26 @@ const Canvas = (props: Image) => {
       <Stack>
         <Sidebar />
         <Button
-          onClick={() =>
+          onClick={() => {
+            const width = x2 - x1;
+            const height = y2 - y1;
             console.log(
               `x1: ${x1}, x2: ${x2},  y1: ${y1}, y2: ${y2}, width: ${
                 x2 - x1
               }, height: ${y2 - y1}`
-            )
-          }>
+            );
+            const pixelsData= contextRef.current.getImageData(x1, y1, width, height);
+            const orginalData = pixelsData.data;
+            const removedData = pixelsData.data;
+
+            for (let i = 0; i < removedData.length; i += 4) {
+              removedData[i] = 0;
+              removedData[i + 1] = 0;
+              removedData[i + 2] = 0;
+            }
+            contextRef.current.putImageData(pixelsData, x1, y1);
+            console.log("orginalData", orginalData);
+          }}>
           Hide Selected Area
         </Button>
         <canvas
