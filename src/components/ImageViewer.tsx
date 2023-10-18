@@ -4,7 +4,6 @@ import { IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
 import { Dropzone, MIME_TYPES, FileWithPath } from "@mantine/dropzone";
 
 import Canvas from "./Canvas";
-import { Sidebar } from "./Sidebar";
 
 export function ImageViewer() {
   const theme = useMantineTheme();
@@ -70,7 +69,6 @@ export function ImageViewer() {
     return (
       <>
         <Box>{preview[0]}</Box>
-       
       </>
     );
   }

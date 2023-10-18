@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Sidebar } from "./Sidebar";
-import {  Stack } from "@mantine/core";
+import { Stack, Button } from "@mantine/core";
 
 interface Image {
   imgSrc: string;
@@ -20,12 +20,17 @@ const Canvas = (props: Image) => {
   const startX = useRef(null);
   const startY = useRef(null);
 
+  const [x1, setX1] = useState(0);
+  const [x2, setX2] = useState(0);
+  const [y1, setY1] = useState(0);
+  const [y2, setY2] = useState(0);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
     const img = new Image();
     img.onload = () => {
-      context.drawImage(img, 0, 0, context.canvas.width, context.canvas.height);
+      context.drawImage(img, 0, 0, img.width, img.height);
     };
     img.src = props.imgSrc;
     setImg(img);
@@ -48,6 +53,9 @@ const Canvas = (props: Image) => {
 
     startX.current = nativeEvent.clientX - canvasOffSetX.current;
     startY.current = nativeEvent.clientY - canvasOffSetY.current;
+
+    setX1(startX.current);
+    setY1(startY.current);
 
     setIsDrawing(true);
   };
@@ -81,6 +89,8 @@ const Canvas = (props: Image) => {
       rectWidht,
       rectHeight
     );
+    setX2(newMouseX);
+    setY2(newMouseY);
   };
 
   const stopDrawingRectangle = () => {
@@ -91,6 +101,16 @@ const Canvas = (props: Image) => {
     <>
       <Stack>
         <Sidebar />
+        <Button
+          onClick={() =>
+            console.log(
+              `x1: ${x1}, x2: ${x2},  y1: ${y1}, y2: ${y2}, width: ${
+                x2 - x1
+              }, height: ${y2 - y1}`
+            )
+          }>
+          Hide Selected Area
+        </Button>
         <canvas
           id="canvas"
           width="600px"
