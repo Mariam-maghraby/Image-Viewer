@@ -1,17 +1,17 @@
 import React, { useEffect, useRef } from "react";
 
 interface Image {
-    imgSrc: string;
+  imgSrc: string;
 }
 
-const Canvas = ( props: Image) => {
+const Canvas = (props: Image) => {
   const canvasRef = useRef(null);
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
     const img = new Image();
     img.onload = () => {
-      context.drawImage(img, 0, 0, context.canvas.width, context.canvas.height);
+      context.drawImage(img, 0, 0, img.width, img.height);
     };
     img.src = props.imgSrc;
 
@@ -19,7 +19,7 @@ const Canvas = ( props: Image) => {
     // context.fillRect(0, 0, context.canvas.width, context.canvas.height);
   });
 
-  return <canvas ref={canvasRef} {...props} />;
+  return <canvas width="600px" height="800px" ref={canvasRef} {...props} />;
 };
 
 export default Canvas;
