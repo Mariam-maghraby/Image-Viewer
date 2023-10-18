@@ -686,19 +686,6 @@
   dependencies:
     "@babel/runtime" "^7.13.10"
 
-"@tabler/icons-react@^2.38.0":
-  version "2.38.0"
-  resolved "https://registry.yarnpkg.com/@tabler/icons-react/-/icons-react-2.38.0.tgz#2f77785ab4b6a0aee3f056675b97c6fe8a1b4af8"
-  integrity sha512-4oLo7z7HkFQXZNNAo3tmhpdZTeFrSNSxngmrEOGZ6WsjT2WRlc6kcEHMVxfCekV19JeB6Yprg30Bdr4sUYJLiQ==
-  dependencies:
-    "@tabler/icons" "2.38.0"
-    prop-types "^15.7.2"
-
-"@tabler/icons@2.38.0", "@tabler/icons@^2.38.0":
-  version "2.38.0"
-  resolved "https://registry.yarnpkg.com/@tabler/icons/-/icons-2.38.0.tgz#fe79c675aafa9a2bbacb6d3c02d6b38662fae890"
-  integrity sha512-icDKK6n8jUYAavHK+L2Xe0/tYjwZVS7uhVazhCMVjdm3RfJLFbeLSNEIWcYdGOg6QAock9yqWse8hnhvsy2M3w==
-
 "@types/babel__core@^7.20.2":
   version "7.20.2"
   resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.20.2.tgz#215db4f4a35d710256579784a548907237728756"
@@ -731,13 +718,6 @@
   integrity sha512-ojlGK1Hsfce93J0+kn3H5R73elidKUaZonirN33GSmgTUMpzI/MIFfSpF3haANe3G1bEBS9/9/QEqwTzwqFsKw==
   dependencies:
     "@babel/types" "^7.20.7"
-
-"@types/jquery@^3.5.23":
-  version "3.5.23"
-  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.5.23.tgz#f99f08533ad5a5c4cb1d0dc131ecf5e2a73eb182"
-  integrity sha512-LwtD05mlY8iPF/1aB8dOZaYhRDothbHA7csnAxhyqMnQxj90Fo3J4nPhmHiA0OMTwHhjwZdE1Lpd6UK+b+C6Bw==
-  dependencies:
-    "@types/sizzle" "*"
 
 "@types/json-schema@^7.0.12":
   version "7.0.13"
@@ -779,11 +759,6 @@
   version "7.5.3"
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.5.3.tgz#9a726e116beb26c24f1ccd6850201e1246122e04"
   integrity sha512-OxepLK9EuNEIPxWNME+C6WwbRAOOI2o2BaQEGzz5Lu2e4Z5eDnEo+/aVEDMIXywoJitJ7xWd641wrGLZdtwRyw==
-
-"@types/sizzle@*":
-  version "2.3.4"
-  resolved "https://registry.yarnpkg.com/@types/sizzle/-/sizzle-2.3.4.tgz#cd6531924f60834fa4a1b8081f9eecf9bb1117f0"
-  integrity sha512-jA2llq2zNkg8HrALI7DtWzhALcVH0l7i89yhY3iBdOz6cBPeACoFq+fkQrjHA39t1hnSFOboZ7A/AY5MMZSlag==
 
 "@typescript-eslint/eslint-plugin@^6.0.0":
   version "6.7.4"
@@ -1522,11 +1497,6 @@ isexe@^2.0.0:
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==
 
-jquery@^3.7.1:
-  version "3.7.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.7.1.tgz#083ef98927c9a6a74d05a6af02806566d16274de"
-  integrity sha512-m4avr8yL8kmFN8psrbFFFmB/If14iN5o9nw/NgnnM+kybDJpRsAynV2BsfpTYrTRysYUdADVD7CkUUizgkpLfg==
-
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
@@ -1766,7 +1736,7 @@ prelude-ls@^1.2.1:
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
 
-prop-types@^15.5.7, prop-types@^15.7.2, prop-types@^15.8.1:
+prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -1830,13 +1800,6 @@ react-remove-scroll@^2.5.5:
     tslib "^2.1.0"
     use-callback-ref "^1.3.0"
     use-sidecar "^1.1.2"
-
-react-shape-editor@4.0.0-alpha.2:
-  version "4.0.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/react-shape-editor/-/react-shape-editor-4.0.0-alpha.2.tgz#bf73cff944eb27e831a1684abb43f27244acc3bb"
-  integrity sha512-MPBNGRC7Lpdou7ffmWObH2nFnOGPH2kYinbHls8Xio044cA8lJwvnMaQz+yeWgTK0AZIwWlnwf9ecJW0A7n8ug==
-  dependencies:
-    prop-types "^15.5.7"
 
 react-style-singleton@^2.2.1:
   version "2.2.1"

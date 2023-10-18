@@ -14,13 +14,8 @@
     "@mantine/core": "6.0.10",
     "@mantine/dropzone": "6.0.10",
     "@mantine/hooks": "6.0.10",
-    "@tabler/icons": "^2.38.0",
-    "@tabler/icons-react": "^2.38.0",
-    "@types/jquery": "^3.5.23",
-    "jquery": "^3.7.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-shape-editor": "4.0.0-alpha.2"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

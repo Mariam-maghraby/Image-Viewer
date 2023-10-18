@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import {Sidebar} from "./Sidebar";
-
+import { Sidebar } from "./Sidebar";
+import { Group, Stack } from "@mantine/core";
 
 interface Image {
   imgSrc: string;
@@ -89,19 +89,20 @@ const Canvas = (props: Image) => {
 
   return (
     <>
-      
-      <canvas
-        id="canvas"
-        width="600px"
-        height="800px"
-        ref={canvasRef}
-        {...props}
-        onMouseDown={startDrawingRectangle}
-        onMouseMove={drawRectangle}
-        onMouseUp={stopDrawingRectangle}
-        onMouseLeave={stopDrawingRectangle}
-      />
-      <Sidebar />
+      <Stack>
+        <Sidebar />
+        <canvas
+          id="canvas"
+          width="600px"
+          height="800px"
+          ref={canvasRef}
+          {...props}
+          onMouseDown={startDrawingRectangle}
+          onMouseMove={drawRectangle}
+          onMouseUp={stopDrawingRectangle}
+          onMouseLeave={stopDrawingRectangle}
+        />
+      </Stack>
     </>
   );
 };
