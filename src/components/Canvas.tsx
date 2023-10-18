@@ -24,6 +24,8 @@ const Canvas = (props: Image) => {
     };
     img.src = props.imgSrc;
 
+    // context.save();
+
     context.fillStyle = "#000000";
     context.fillRect(0, 0, context.canvas.width, context.canvas.height);
 
@@ -49,6 +51,9 @@ const Canvas = (props: Image) => {
       return;
     }
 
+    // context.clearRect(0, 0, 500, 500);
+    // context.drawImage(img, 0, 0);
+
     nativeEvent.preventDefault();
     nativeEvent.stopPropagation();
 
@@ -64,6 +69,12 @@ const Canvas = (props: Image) => {
       canvasRef.current.width,
       canvasRef.current.height
     );
+
+    const img = new Image();
+    img.onload = () => {
+      contextRef.current.drawImage(img, 0, 0, img.width, img.height);
+    };
+    img.src = props.imgSrc;
 
     contextRef.current.strokeRect(
       startX.current,
