@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import { Text, Box, Group, useMantineTheme } from "@mantine/core";
+import { useState } from "react";
+import { Text, Box, Group, useMantineTheme, Image } from "@mantine/core";
 import { IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
 import { Dropzone, MIME_TYPES, FileWithPath } from "@mantine/dropzone";
 import {
@@ -38,58 +38,15 @@ export function ImageViewer() {
   });
   const [selectedShapeIds, setSelectedShapeIds] = useState([]);
 
-  const previews = files.map((file, index) => {
+  const preview = files.map((file, index) => {
     const imageUrl = URL.createObjectURL(file);
 
     return (
       <>
-        <ShapeEditor vectorWidth={vectorWidth} vectorHeight={vectorHeight}>
-          <ImageLayer
-            key={index}
-            src={imageUrl}
-            onLoad={({ naturalWidth, naturalHeight }) => {
-              setVectorDimensions({
-                vectorWidth: naturalWidth,
-                vectorHeight: naturalHeight,
-              });
-            }}
-          />
-          <DrawLayer
-            onAddShape={({ x, y, width, height }) => {
-              setItems((currentItems) => [
-                ...currentItems,
-                { id: `id${idIterator}`, x, y, width, height },
-              ]);
-              idIterator += 1;
-            }}
-          />
-          {items.map((item, index) => {
-            const { id, height, width, x, y } = item;
-            return (
-              <RectShape
-                key={id}
-                shapeId={id}
-                height={height}
-                width={width}
-                x={x}
-                y={y}
-                onChange={(newRect) => {
-                  setItems((currentItems) =>
-                    arrayReplace(currentItems, index, {
-                      ...item,
-                      ...newRect,
-                    })
-                  );
-                }}
-                onDelete={() => {
-                  setItems((currentItems) =>
-                    arrayReplace(currentItems, index, [])
-                  );
-                }}
-              />
-            );
-          })}
-        </ShapeEditor>
+        <canvas id="img-canvas" width="800px" height="400px">
+          <img src={imageUrl} alt= 
+          "upladede Image"/>
+        </canvas>
       </>
     );
   });
@@ -141,6 +98,6 @@ export function ImageViewer() {
   }
 
   if (files.length) {
-    return <Box>{previews}</Box>;
+    return <Box>{preview[0]}</Box>;
   }
 }
