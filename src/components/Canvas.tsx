@@ -76,12 +76,12 @@ const Canvas = (props: Image) => {
     const rectWidht = newMouseX - startX.current;
     const rectHeight = newMouseY - startY.current;
 
-    contextRef.current.clearRect(
-      0,
-      0,
-      canvasRef.current.width,
-      canvasRef.current.height
-    );
+    // contextRef.current.clearRect(
+    //   0,
+    //   0,
+    //   canvasRef.current.width,
+    //   canvasRef.current.height
+    // );
 
     contextRef.current.drawImage(img, 0, 0, img.width, img.height);
 
