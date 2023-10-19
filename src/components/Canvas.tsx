@@ -204,15 +204,15 @@ const Canvas = (props: Image) => {
               );
 
               console.log(`x, y: ${x1}, ${y1}`);
-              const width = imagesBuffer[0].width;
-              console.log("width", width);
-              const height = imagesBuffer[0].height;
+              const width = imgMetaData.removedBlocks.width;
+              // console.log("width", width);
+              const height = imgMetaData.removedBlocks.height;
 
-              const min_x = imagesBuffer[0].local_x1;
-              const max_x = imagesBuffer[0].local_x2 + width;
+              const min_x = imgMetaData.removedBlocks.local_x1;
+              const max_x = imgMetaData.removedBlocks.local_x2 + width;
 
-              const min_y = imagesBuffer[0].local_y1;
-              const max_y = imagesBuffer[0].local_y1 + height;
+              const min_y = imgMetaData.removedBlocks.local_y1;
+              const max_y = imgMetaData.removedBlocks.local_y1 + height;
 
               if (x1 < max_x && x1 > min_x && y1 < max_y && y1 > min_y) {
                 const pixelsData = contextRef.current.getImageData(
