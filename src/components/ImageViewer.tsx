@@ -35,13 +35,11 @@ export function ImageViewer() {
         onDrop={setFiles}
         onReject={(files) => console.log("rejected files", files)}
         maxSize={3 * 1024 ** 2}
-        accept={[MIME_TYPES.png, MIME_TYPES.jpeg, MIME_TYPES.svg]}
-        >
+        accept={[MIME_TYPES.png, MIME_TYPES.jpeg, MIME_TYPES.svg]}>
         <Group
           position="center"
           spacing="xl"
-          style={{ minHeight: 220, pointerEvents: "none" }}
-          >
+          style={{ minHeight: 220, pointerEvents: "none" }}>
           <Dropzone.Accept>
             <IconUpload
               size={50}
@@ -62,7 +60,7 @@ export function ImageViewer() {
 
           <div>
             <Text size="xl" color="dimmed" inline>
-              Drag image here 
+              Drag image here
             </Text>
             <br />
             <Text size="sm" color="dimmed" inline>

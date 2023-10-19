@@ -75,6 +75,18 @@ const Canvas = (props: Image) => {
     setIsDrawing(true);
   };
 
+  const setMousePosition = ({ nativeEvent }) => {
+    nativeEvent.preventDefault();
+    nativeEvent.stopPropagation();
+
+    startX.current = nativeEvent.clientX - canvasOffSetX.current;
+    startY.current = nativeEvent.clientY - canvasOffSetY.current;
+
+    setX1(startX.current);
+    setY1(startY.current);
+
+  }
+
   const drawRectangle = ({ nativeEvent }) => {
     if (!isDrawing) {
       return;
@@ -265,6 +277,7 @@ const Canvas = (props: Image) => {
           onMouseMove={drawRectangle}
           onMouseUp={stopDrawingRectangle}
           onMouseLeave={stopDrawingRectangle}
+          onMouseEnter={setMousePosition}
         />
       </Stack>
     </>
