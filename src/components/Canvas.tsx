@@ -34,6 +34,7 @@ const Canvas = (props: Image) => {
     const exifData = await exifr.parse(file);
     console.log("exifData", exifData);
     setImgMetaData(exifData);
+    return exifData;
   };
 
   useEffect(() => {
@@ -170,7 +171,11 @@ const Canvas = (props: Image) => {
             const jpeg = canvasRef.current.toDataURL("image/jpeg", 0.75); // mime=JPEG, quality=0.75
             console.log(jpeg.length);
 
-            // setImgMetaData(exifbytes);
+            const oldMetaData = getImgMetaData(img);
+            const newMetaData = { oldMetaData, removedBlocks: dataObject };
+            setImgMetaData(newMetaData);
+
+            console.log("imgMetaData" + imgMetaData);
 
             const newJpeg = piexif.insert(exifbytes, jpeg);
             console.log("newJpeg", newJpeg);
@@ -246,7 +251,6 @@ const Canvas = (props: Image) => {
             const newJpeg = piexif.insert(exifbytes, currJpeg);
             link.href = newJpeg;
             link.click();
-            link.delete;
           }}>
           Download Image
         </Button>

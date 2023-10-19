@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Text, Box, Group, useMantineTheme } from "@mantine/core";
+import {
+  Text,
+  Box,
+  Group,
+  useMantineTheme,
+  Button,
+  Stack,
+} from "@mantine/core";
 import { IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
 import { Dropzone, MIME_TYPES, FileWithPath } from "@mantine/dropzone";
 
@@ -14,8 +21,10 @@ export function ImageViewer() {
 
     return (
       <>
-        {/* <Button onClick={() => files.pop()} > Upload New Image</Button> */}
-        <Canvas imgSrc={imageUrl} />
+        <Stack>
+          <Button onClick={() => setFiles([])}> Upload New Image</Button>
+          <Canvas imgSrc={imageUrl} />
+        </Stack>
       </>
     );
   });
@@ -57,7 +66,7 @@ export function ImageViewer() {
             <Text size="xl" inline>
               Drag images here or click to select files
             </Text>
-            <Text size="sm" className="text-gray-500" inline >
+            <Text size="sm" className="text-gray-500" inline>
               Attach as many files as you like, each file should not exceed 5mb
             </Text>
           </div>
