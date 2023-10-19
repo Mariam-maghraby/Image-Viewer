@@ -14,6 +14,7 @@ export function ImageViewer() {
 
     return (
       <>
+        {/* <Button onClick={() => files.pop()} > Upload New Image</Button> */}
         <Canvas imgSrc={imageUrl} />
       </>
     );
@@ -56,7 +57,7 @@ export function ImageViewer() {
             <Text size="xl" inline>
               Drag images here or click to select files
             </Text>
-            <Text size="sm" className="text-gray-500" inline mt={7}>
+            <Text size="sm" className="text-gray-500" inline >
               Attach as many files as you like, each file should not exceed 5mb
             </Text>
           </div>

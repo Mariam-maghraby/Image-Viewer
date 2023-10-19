@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Stack, Button } from "@mantine/core";
 import exifr from "exifr";
-// import { Image } from "load-image-react";
+import piexif from "piexifjs";
 
 interface Image {
   imgSrc: string;
@@ -163,6 +163,17 @@ const Canvas = (props: Image) => {
             };
 
             imagesBuffer.push(dataObject);
+
+            const exifbytes = piexif.dump(imgMetaData);
+            console.log("exifBytes:", exifbytes);
+
+            const jpeg = canvasRef.current.toDataURL("image/jpeg", 0.75); // mime=JPEG, quality=0.75
+            console.log(jpeg.length);
+
+            // setImgMetaData(exifbytes);
+
+            const newJpeg = piexif.insert(exifbytes, jpeg);
+            console.log("newJpeg", newJpeg);
           }}>
           Hide Selected Area
         </Button>
@@ -229,17 +240,11 @@ const Canvas = (props: Image) => {
         <Button
           onClick={async () => {
             const link = document.createElement("a");
-            link.download = "download.peg";
-            // <Image
-            //   src="download.png"
-            //   loadOptions={{
-            //     downsamplingRatio: 0.5,
-            //     maxWidth: 200,
-            //     maxHeight: 200,
-            //   }}
-            // />;
-            link.href = canvasRef.current.toDataURL();
-            link.href = data.toDataURL();
+            link.download = "download.jpeg";
+            const exifbytes = piexif.dump(imgMetaData);
+            const currJpeg = canvasRef.current.toDataURL("image/jpeg", 0.75); // mime=JPEG, quality=0.75
+            const newJpeg = piexif.insert(exifbytes, currJpeg);
+            link.href = newJpeg;
             link.click();
             link.delete;
           }}>
