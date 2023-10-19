@@ -1,6 +1,8 @@
+/* eslint-disable padded-blocks */
 import React, { useEffect, useRef, useState } from "react";
-import { Sidebar } from "./Sidebar";
-import { Stack, Button, Box } from "@mantine/core";
+import { Stack, Button } from "@mantine/core";
+import exifr from "exifr";
+
 
 interface Image {
   imgSrc: string;
@@ -15,6 +17,8 @@ const Canvas = (props: Image) => {
   /*for using image in canvas*/
   const [img, setImg] = useState(null);
 
+  const [imgMetaData, setImgMetaData] = useState(null);
+
   const canvasOffSetX = useRef(null);
   const canvasOffSetY = useRef(null);
   const startX = useRef(null);
@@ -27,15 +31,24 @@ const Canvas = (props: Image) => {
 
   const imagesBuffer = [];
 
+  const getImgMetaData = async (file) => {
+    let exifData = await exifr.parse(file);
+    console.log("exifData", exifData);
+    setImgMetaData(exifData);
+  };
+
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
+
     const img = new Image();
     img.onload = () => {
       context.drawImage(img, 0, 0, img.width, img.height);
     };
     img.src = props.imgSrc;
+
     setImg(img);
+    getImgMetaData(img);
 
     // context.save();
 
@@ -47,7 +60,11 @@ const Canvas = (props: Image) => {
     const canvasOffSet = canvas.getBoundingClientRect();
     canvasOffSetX.current = canvasOffSet.top;
     canvasOffSetY.current = canvasOffSet.left;
+
+    
   }, []);
+
+ 
 
   const startDrawingRectangle = ({ nativeEvent }) => {
     nativeEvent.preventDefault();
@@ -76,12 +93,12 @@ const Canvas = (props: Image) => {
     const rectWidht = newMouseX - startX.current;
     const rectHeight = newMouseY - startY.current;
 
-    // contextRef.current.clearRect(
-    //   0,
-    //   0,
-    //   canvasRef.current.width,
-    //   canvasRef.current.height
-    // );
+    contextRef.current.clearRect(
+      0,
+      0,
+      canvasRef.current.width,
+      canvasRef.current.height
+    );
 
     contextRef.current.drawImage(img, 0, 0, img.width, img.height);
 
@@ -109,8 +126,8 @@ const Canvas = (props: Image) => {
             const height = y2 - y1;
             const local_x1 = x1;
             const local_y1 = y1;
-            const local_x2 = x2;
-            const local_y2 = y2;
+            // const local_x2 = x2;
+            // const local_y2 = y2;
             console.log(
               `x1: ${x1}, x2: ${x2},  y1: ${y1}, y2: ${y2}, width: ${
                 x2 - x1
@@ -136,7 +153,7 @@ const Canvas = (props: Image) => {
             contextRef.current.save();
 
             console.log("orginalData", orginalData);
-            let dataObject = {
+            const dataObject = {
               orginalData: orginalData,
               local_x1: local_x1,
               local_y1: local_y1,
@@ -145,6 +162,8 @@ const Canvas = (props: Image) => {
             };
 
             imagesBuffer.push(dataObject);
+
+            getImgMetaData(img);
           }}>
           Hide Selected Area
         </Button>
@@ -158,15 +177,15 @@ const Canvas = (props: Image) => {
             );
 
             console.log(`x, y: ${x1}, ${y1}`);
-            let width = imagesBuffer[0].width;
+            const width = imagesBuffer[0].width;
             console.log("width", width);
-            let height = imagesBuffer[0].height;
+            const height = imagesBuffer[0].height;
 
-            let min_x = imagesBuffer[0].local_x1;
-            let max_x = imagesBuffer[0].local_x2 + width;
+            const min_x = imagesBuffer[0].local_x1;
+            const max_x = imagesBuffer[0].local_x2 + width;
 
-            let min_y = imagesBuffer[0].local_y1;
-            let max_y = imagesBuffer[0].local_y1 + height;
+            const min_y = imagesBuffer[0].local_y1;
+            const max_y = imagesBuffer[0].local_y1 + height;
 
             if (x1 < max_x && x1 > min_x && y1 < max_y && y1 > min_y) {
               const pixelsData = contextRef.current.getImageData(
@@ -177,7 +196,7 @@ const Canvas = (props: Image) => {
               );
               const currentData = pixelsData.data;
               const originalData = imagesBuffer[0].orginalData;
-              for (let i = 0; i < removedData.length; i += 4) {
+              for (let i = 0; i < currentData.length; i += 4) {
                 currentData[i] = originalData[i];
                 currentData[i + 1] = originalData[i + 1];
                 currentData[i + 2] = originalData[i + 2];
