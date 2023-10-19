@@ -1,8 +1,7 @@
-/* eslint-disable padded-blocks */
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Stack, Button } from "@mantine/core";
 import exifr from "exifr";
-
+// import { Image } from "load-image-react";
 
 interface Image {
   imgSrc: string;
@@ -32,7 +31,7 @@ const Canvas = (props: Image) => {
   const imagesBuffer = [];
 
   const getImgMetaData = async (file) => {
-    let exifData = await exifr.parse(file);
+    const exifData = await exifr.parse(file);
     console.log("exifData", exifData);
     setImgMetaData(exifData);
   };
@@ -43,7 +42,7 @@ const Canvas = (props: Image) => {
 
     const img = new Image();
     img.onload = () => {
-      context.drawImage(img, 0, 0, img.width, img.height);
+      context.drawImage(img, 0, 0, context.canvas.width, context.canvas.height);
     };
     img.src = props.imgSrc;
 
@@ -60,11 +59,7 @@ const Canvas = (props: Image) => {
     const canvasOffSet = canvas.getBoundingClientRect();
     canvasOffSetX.current = canvasOffSet.top;
     canvasOffSetY.current = canvasOffSet.left;
-
-    
-  }, []);
-
- 
+  }, [props.imgSrc]);
 
   const startDrawingRectangle = ({ nativeEvent }) => {
     nativeEvent.preventDefault();
@@ -100,7 +95,13 @@ const Canvas = (props: Image) => {
       canvasRef.current.height
     );
 
-    contextRef.current.drawImage(img, 0, 0, img.width, img.height);
+    contextRef.current.drawImage(
+      img,
+      0,
+      0,
+      canvasRef.current.width,
+      canvasRef.current.height
+    );
 
     contextRef.current.strokeRect(
       startX.current,
@@ -162,8 +163,6 @@ const Canvas = (props: Image) => {
             };
 
             imagesBuffer.push(dataObject);
-
-            getImgMetaData(img);
           }}>
           Hide Selected Area
         </Button>
@@ -217,15 +216,30 @@ const Canvas = (props: Image) => {
               canvasRef.current.width,
               canvasRef.current.height
             );
-            contextRef.current.drawImage(img, 0, 0, img.width, img.height);
+            contextRef.current.drawImage(
+              img,
+              0,
+              0,
+              canvasRef.current.width,
+              canvasRef.current.height
+            );
           }}>
           Show All hidden blocks
         </Button>
         <Button
-          onClick={() => {
+          onClick={async () => {
             const link = document.createElement("a");
-            link.download = "download.png";
+            link.download = "download.peg";
+            // <Image
+            //   src="download.png"
+            //   loadOptions={{
+            //     downsamplingRatio: 0.5,
+            //     maxWidth: 200,
+            //     maxHeight: 200,
+            //   }}
+            // />;
             link.href = canvasRef.current.toDataURL();
+            link.href = data.toDataURL();
             link.click();
             link.delete;
           }}>
