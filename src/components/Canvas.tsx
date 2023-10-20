@@ -18,8 +18,6 @@ const Canvas = (props: Image) => {
 
   const [imgMetaData, setImgMetaData] = useState(null);
 
-  //
-
   const canvasOffSetX = useRef(null);
   const canvasOffSetY = useRef(null);
   const startX = useRef(null);
@@ -29,8 +27,6 @@ const Canvas = (props: Image) => {
   const [x2, setX2] = useState(0);
   const [y1, setY1] = useState(0);
   const [y2, setY2] = useState(0);
-
-  const imagesBuffer = [];
 
   const getImgMetaData = async (file) => {
     const exifData = await exifr.parse(file);
@@ -177,37 +173,15 @@ const Canvas = (props: Image) => {
                 height: height,
               };
 
-              imagesBuffer.push(dataObject);
-
-              // const exifbytes = piexif.dump(imgMetaData);
-              // console.log("exifBytes:", exifbytes);
-
               const jpeg = canvasRef.current.toDataURL("image/jpeg", 0.75); // mime=JPEG, quality=0.75
-              console.log(jpeg.length);
-
-              const exifObj = piexif.load(jpeg);
-              const exifBytes = piexif.dump(exifObj);
-              console.log("exifBytes:", exifBytes);
-
-              // const oldMetaData = getImgMetaData(img);
-              // const newMetaData = { oldMetaData, removedBlocks: dataObject };
-              // setImgMetaData(newMetaData);
-
-              console.log("imgMetaData" + imgMetaData);
-              // const exif = {};
 
               const newExif = { imgMetaData, dataObject };
               setImgMetaData(newExif);
-              // exif[piexif.ExifIFD.removedData] = [new String(newExif), "ucs2"];
-              // console.log("newExif", newExif);
-              // const newExifObj = { Exif: exif };
-              // const newExifBytes = piexif.dump(newExifObj);
-
-              // const newJpeg = piexif.insert(newExifBytes, jpeg);
-              // console.log("newJpeg", newJpeg);
+              console.log("imgMetaData" + imgMetaData);
 
               let newJpeg = piexif.remove(jpeg);
               const exifbytes = piexif.dump(newExif);
+              console.log("exifBytes:", exifbytes);
               newJpeg = piexif.insert(exifbytes, newJpeg);
 
               if (newJpeg === jpeg) {
@@ -215,8 +189,6 @@ const Canvas = (props: Image) => {
               } else {
                 console.log("img meta data is different");
               }
-
-              
             }}>
             Hide Selected Area
           </Button>
@@ -231,14 +203,18 @@ const Canvas = (props: Image) => {
 
               console.log(`x, y: ${x1}, ${y1}`);
               const width = imgMetaData.dataObject.width;
-              console.log("width", width);
+
               const height = imgMetaData.dataObject.height;
 
               const min_x = imgMetaData.dataObject.local_x1;
+              console.log("min_x", min_x);
               const max_x = imgMetaData.dataObject.local_x2 + width;
+              console.log("max_x", max_x);
 
               const min_y = imgMetaData.dataObject.local_y1;
+              console.log("min_y", min_y);
               const max_y = imgMetaData.dataObject.local_y1 + height;
+              console.log("max_y", max_y);
 
               if (x1 < max_x && x1 > min_x && y1 < max_y && y1 > min_y) {
                 const pixelsData = contextRef.current.getImageData(
