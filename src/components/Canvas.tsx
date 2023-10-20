@@ -18,6 +18,8 @@ const Canvas = (props: Image) => {
 
   const [imgMetaData, setImgMetaData] = useState(null);
 
+  //
+
   const canvasOffSetX = useRef(null);
   const canvasOffSetY = useRef(null);
   const startX = useRef(null);
@@ -84,8 +86,7 @@ const Canvas = (props: Image) => {
 
     setX1(startX.current);
     setY1(startY.current);
-
-  }
+  };
 
   const drawRectangle = ({ nativeEvent }) => {
     if (!isDrawing) {
@@ -167,6 +168,7 @@ const Canvas = (props: Image) => {
               contextRef.current.save();
 
               console.log("orginalData", orginalData);
+
               const dataObject = {
                 orginalData: orginalData,
                 local_x1: local_x1,
@@ -177,20 +179,44 @@ const Canvas = (props: Image) => {
 
               imagesBuffer.push(dataObject);
 
-              const exifbytes = piexif.dump(imgMetaData);
-              console.log("exifBytes:", exifbytes);
+              // const exifbytes = piexif.dump(imgMetaData);
+              // console.log("exifBytes:", exifbytes);
 
               const jpeg = canvasRef.current.toDataURL("image/jpeg", 0.75); // mime=JPEG, quality=0.75
               console.log(jpeg.length);
 
-              const oldMetaData = getImgMetaData(img);
-              const newMetaData = { oldMetaData, removedBlocks: dataObject };
-              setImgMetaData(newMetaData);
+              const exifObj = piexif.load(jpeg);
+              const exifBytes = piexif.dump(exifObj);
+              console.log("exifBytes:", exifBytes);
+
+              // const oldMetaData = getImgMetaData(img);
+              // const newMetaData = { oldMetaData, removedBlocks: dataObject };
+              // setImgMetaData(newMetaData);
 
               console.log("imgMetaData" + imgMetaData);
+              // const exif = {};
 
-              const newJpeg = piexif.insert(exifbytes, jpeg);
-              console.log("newJpeg", newJpeg);
+              const newExif = { imgMetaData, dataObject };
+              setImgMetaData(newExif);
+              // exif[piexif.ExifIFD.removedData] = [new String(newExif), "ucs2"];
+              // console.log("newExif", newExif);
+              // const newExifObj = { Exif: exif };
+              // const newExifBytes = piexif.dump(newExifObj);
+
+              // const newJpeg = piexif.insert(newExifBytes, jpeg);
+              // console.log("newJpeg", newJpeg);
+
+              let newJpeg = piexif.remove(jpeg);
+              const exifbytes = piexif.dump(newExif);
+              newJpeg = piexif.insert(exifbytes, newJpeg);
+
+              if (newJpeg === jpeg) {
+                console.log("img meta data is same");
+              } else {
+                console.log("img meta data is different");
+              }
+
+              
             }}>
             Hide Selected Area
           </Button>
@@ -204,15 +230,15 @@ const Canvas = (props: Image) => {
               );
 
               console.log(`x, y: ${x1}, ${y1}`);
-              const width = imgMetaData.removedBlocks.width;
-              // console.log("width", width);
-              const height = imgMetaData.removedBlocks.height;
+              const width = imgMetaData.dataObject.width;
+              console.log("width", width);
+              const height = imgMetaData.dataObject.height;
 
-              const min_x = imgMetaData.removedBlocks.local_x1;
-              const max_x = imgMetaData.removedBlocks.local_x2 + width;
+              const min_x = imgMetaData.dataObject.local_x1;
+              const max_x = imgMetaData.dataObject.local_x2 + width;
 
-              const min_y = imgMetaData.removedBlocks.local_y1;
-              const max_y = imgMetaData.removedBlocks.local_y1 + height;
+              const min_y = imgMetaData.dataObject.local_y1;
+              const max_y = imgMetaData.dataObject.local_y1 + height;
 
               if (x1 < max_x && x1 > min_x && y1 < max_y && y1 > min_y) {
                 const pixelsData = contextRef.current.getImageData(
@@ -221,17 +247,18 @@ const Canvas = (props: Image) => {
                   width,
                   height
                 );
+
                 const currentData = pixelsData.data;
-                const originalData = imagesBuffer[0].orginalData;
+                const originalData = imgMetaData.dataObject.orginalData;
                 for (let i = 0; i < currentData.length; i += 4) {
                   currentData[i] = originalData[i];
                   currentData[i + 1] = originalData[i + 1];
                   currentData[i + 2] = originalData[i + 2];
                 }
 
-                contextRef.current.putImageData(originalData, min_x, min_y);
+                contextRef.current.putImageData(originalData, 122, 276);
               } else {
-                alert("Please select the one of the hidden blocks");
+                alert("Please select one of the hidden blocks");
               }
             }}>
             Show Selected Area
