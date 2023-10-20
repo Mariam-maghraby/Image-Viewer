@@ -163,7 +163,6 @@ const Canvas = (props: Image) => {
 
               console.log("dataBuffer after parse", dataBufferArray);
 
-
               const dataObject = {
                 orginalData: dataBufferArray,
                 local_x1: local_x1,
@@ -200,7 +199,7 @@ const Canvas = (props: Image) => {
               }
               contextRef.current.putImageData(pixelsData, local_x1, local_y1);
 
-              // contextRef.current.save();
+              contextRef.current.save();
 
               console.log("removedData", removedData);
               console.log(
@@ -243,6 +242,7 @@ const Canvas = (props: Image) => {
                 width,
                 height
               );
+              console.log("pixelsData before edit", pixelsData.data);
 
               if (x1 < max_x && x1 > min_x && y1 < max_y && y1 > min_y) {
                 const currentData = pixelsData.data;
@@ -268,7 +268,16 @@ const Canvas = (props: Image) => {
                 // );
               } else {
                 alert("Please select one of the hidden blocks");
+
                 contextRef.current.putImageData(pixelsData, min_x, min_y);
+                console.log("pixelsData", pixelsData.data);
+                contextRef.current.drawImage(
+                  img,
+                  0,
+                  0,
+                  canvasRef.current.width,
+                  canvasRef.current.height
+                );
               }
             }}>
             Show Selected Area
