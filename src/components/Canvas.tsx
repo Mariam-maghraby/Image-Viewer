@@ -17,6 +17,7 @@ const Canvas = (props: Image) => {
   const [img, setImg] = useState(null);
 
   const [imgMetaData, setImgMetaData] = useState(null);
+  // const [dataBuffer, setDataBuffer] = useState(null);
 
   const canvasOffSetX = useRef(null);
   const canvasOffSetY = useRef(null);
@@ -37,7 +38,7 @@ const Canvas = (props: Image) => {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
+    const context = canvas.getContext("2d", { willReadFrequently: true });
 
     const img = new Image();
     img.onload = () => {
@@ -151,33 +152,35 @@ const Canvas = (props: Image) => {
                 width,
                 height
               );
-              const orginalData = pixelsData.data;
+
               const removedData = pixelsData.data;
+              localStorage.setItem("removedData", "[" + removedData + "]");
+              console.log("orginalData", removedData);
+              const dataBuffer = localStorage.getItem("removedData");
+              console.log("dataBuffer before parse", dataBuffer);
+              const parsedDataBuffer = JSON.parse(dataBuffer);
+              const dataBufferArray = new Uint8ClampedArray(parsedDataBuffer);
 
-              for (let i = 0; i < removedData.length; i += 4) {
-                removedData[i] = 0;
-                removedData[i + 1] = 0;
-                removedData[i + 2] = 0;
-              }
-              contextRef.current.putImageData(pixelsData, local_x1, local_y1);
+              console.log("dataBuffer after parse", dataBufferArray);
 
-              contextRef.current.save();
-
-              console.log("orginalData", orginalData);
 
               const dataObject = {
-                orginalData: orginalData,
+                orginalData: dataBufferArray,
                 local_x1: local_x1,
                 local_y1: local_y1,
                 width: width,
                 height: height,
               };
+              console.log("dataObject: originalData", dataObject.orginalData);
 
               const jpeg = canvasRef.current.toDataURL("image/jpeg", 0.75); // mime=JPEG, quality=0.75
 
               const newExif = { imgMetaData, dataObject };
               setImgMetaData(newExif);
-              console.log("imgMetaData" + imgMetaData);
+              console.log(
+                "newExif originalData",
+                newExif.dataObject.orginalData
+              );
 
               let newJpeg = piexif.remove(jpeg);
               const exifbytes = piexif.dump(newExif);
@@ -189,6 +192,21 @@ const Canvas = (props: Image) => {
               } else {
                 console.log("img meta data is different");
               }
+
+              for (let i = 0; i < removedData.length; i += 4) {
+                removedData[i] = 0;
+                removedData[i + 1] = 0;
+                removedData[i + 2] = 0;
+              }
+              contextRef.current.putImageData(pixelsData, local_x1, local_y1);
+
+              // contextRef.current.save();
+
+              console.log("removedData", removedData);
+              console.log(
+                "newExif originalData",
+                newExif.dataObject.orginalData
+              );
             }}>
             Hide Selected Area
           </Button>
@@ -208,7 +226,7 @@ const Canvas = (props: Image) => {
 
               const min_x = imgMetaData.dataObject.local_x1;
               console.log("min_x", min_x);
-              const max_x = imgMetaData.dataObject.local_x2 + width;
+              const max_x = imgMetaData.dataObject.local_x1 + width;
               console.log("max_x", max_x);
 
               const min_y = imgMetaData.dataObject.local_y1;
@@ -216,25 +234,41 @@ const Canvas = (props: Image) => {
               const max_y = imgMetaData.dataObject.local_y1 + height;
               console.log("max_y", max_y);
 
-              if (x1 < max_x && x1 > min_x && y1 < max_y && y1 > min_y) {
-                const pixelsData = contextRef.current.getImageData(
-                  min_x,
-                  min_y,
-                  width,
-                  height
-                );
+              // const newImg = new Image();
+              // contextRef.current.drawImage(newImg, min_x, min_y);
 
+              const pixelsData = contextRef.current.getImageData(
+                min_x,
+                min_y,
+                width,
+                height
+              );
+
+              if (x1 < max_x && x1 > min_x && y1 < max_y && y1 > min_y) {
                 const currentData = pixelsData.data;
                 const originalData = imgMetaData.dataObject.orginalData;
+                console.log("currentData", currentData);
+                console.log("originalData", originalData);
+
                 for (let i = 0; i < currentData.length; i += 4) {
                   currentData[i] = originalData[i];
                   currentData[i + 1] = originalData[i + 1];
                   currentData[i + 2] = originalData[i + 2];
+                  currentData[i + 3] = originalData[i + 3];
                 }
+                contextRef.current.putImageData(pixelsData, min_x, min_y);
 
-                contextRef.current.putImageData(originalData, 122, 276);
+                console.log("pixelsData", pixelsData.data);
+                // contextRef.current.drawImage(
+                //   img,
+                //   0,
+                //   0,
+                //   canvasRef.current.width,
+                //   canvasRef.current.height
+                // );
               } else {
                 alert("Please select one of the hidden blocks");
+                contextRef.current.putImageData(pixelsData, min_x, min_y);
               }
             }}>
             Show Selected Area
