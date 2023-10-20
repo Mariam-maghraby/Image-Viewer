@@ -155,13 +155,11 @@ const Canvas = (props: Image) => {
 
               const removedData = pixelsData.data;
               localStorage.setItem("removedData", "[" + removedData + "]");
-              console.log("orginalData", removedData);
+
               const dataBuffer = localStorage.getItem("removedData");
-              console.log("dataBuffer before parse", dataBuffer);
+
               const parsedDataBuffer = JSON.parse(dataBuffer);
               const dataBufferArray = new Uint8ClampedArray(parsedDataBuffer);
-
-              console.log("dataBuffer after parse", dataBufferArray);
 
               const dataObject = {
                 orginalData: dataBufferArray,
@@ -176,10 +174,6 @@ const Canvas = (props: Image) => {
 
               const newExif = { imgMetaData, dataObject };
               setImgMetaData(newExif);
-              console.log(
-                "newExif originalData",
-                newExif.dataObject.orginalData
-              );
 
               let newJpeg = piexif.remove(jpeg);
               const exifbytes = piexif.dump(newExif);
@@ -200,12 +194,6 @@ const Canvas = (props: Image) => {
               contextRef.current.putImageData(pixelsData, local_x1, local_y1);
 
               contextRef.current.save();
-
-              console.log("removedData", removedData);
-              console.log(
-                "newExif originalData",
-                newExif.dataObject.orginalData
-              );
             }}>
             Hide Selected Area
           </Button>
@@ -242,14 +230,12 @@ const Canvas = (props: Image) => {
                 width,
                 height
               );
-              console.log("pixelsData before edit", pixelsData.data);
+              
 
               if (x1 < max_x && x1 > min_x && y1 < max_y && y1 > min_y) {
                 const currentData = pixelsData.data;
                 const originalData = imgMetaData.dataObject.orginalData;
-                console.log("currentData", currentData);
-                console.log("originalData", originalData);
-
+                
                 for (let i = 0; i < currentData.length; i += 4) {
                   currentData[i] = originalData[i];
                   currentData[i + 1] = originalData[i + 1];
